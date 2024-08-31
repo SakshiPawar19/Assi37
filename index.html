@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Diary</title>
+
+    <style>
+
+        .notes-box {
+            height: 500px;
+            background-color: #e6f2ff;
+            width: 80%;
+            border: 4px solid black;
+            border-radius: 15px;
+            display: block;
+            margin-left: 15%;
+            margin-top: 7%;
+        }
+
+        .heading {
+            text-align: center;
+            margin: 50px;
+            letter-spacing: 2px;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        .notes-items {
+            border: 6px double #b31152;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 5px;
+            background-color: #ce8085;
+            color: #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: large;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .btn-del {
+            background-color: rgb(216, 86, 63);
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            height: 30px;
+            width: 70px;
+        }
+
+        .btn-del:hover {
+            background-color:#89b82b);
+        }
+
+        .tasks-container {
+            height: 250px;
+            width: 94%;
+            overflow-y: scroll;
+            margin-left: 30px;
+        }
+
+        .task-input-container {
+            display: flex;
+            justify-content: center;
+            margin: 15px;
+        }
+
+        .task-input {
+            width: 30%;
+            height: 30px;
+            border-radius: 10px;
+            padding: 5px;
+            font-size: 16px;
+            border: 3px solid #a3591c;
+        }
+
+        .task-input:focus {
+            outline: 3px solid #ad593d;
+        }
+
+        .btn-add {
+            border-radius: 40px;
+            background-color: #e71612;
+            color: #fff;
+            padding: 5px 30px;
+            border: none;
+            margin-left: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .btn-add:hover {
+            background-color: #9a6e45;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="notes-box">
+        <h1 class="heading">My Diary</h1>
+
+        <div id="tasks-container" class="tasks-container"></div>
+
+        <div class="task-input-container">
+            <input type="text" id="task-input" placeholder="Enter a task" class="task-input">
+            <button onclick="addTask()" class="btn-add">Add Task</button>
+        </div>
+    </div>
+
+    <script>
+        const tasks = [
+            "Practice JS examples",
+             "HTML Notes",
+            "CSS Implementation",
+             "Javascript Notes",
+             "React JS Notes"
+        ];
+
+        function loadFromLocalStorage() {
+            const allTasks = JSON.parse(localStorage.getItem('allTasks'));
+
+            if (allTasks) {
+                tasks.push(...allTasks)
+            }
+            loadTasks();
+        }
+        loadFromLocalStorage();
+
+        function loadTasks() {
+            localStorage.setItem('allTasks', JSON.stringify(tasks));
+
+            const tasksContainer = document.getElementById("tasks-container");
+            tasksContainer.innerHTML = '';
+
+            for (const task of tasks) {
+                tasksContainer.innerHTML += `
+            <div class = "notes-items"> 
+                ${task} 
+                <button class="btn-del" type="button" onclick="deleteTask('${task}')">
+                    Delete
+                </button>
+            </div>
+            `
+            }
+        }
+
+        function deleteTask(task) {
+            const taskIndex = tasks.indexOf(task);
+            tasks.splice(taskIndex, 1);
+
+            loadTasks();
+        }
+
+        function addTask() {
+            const taskInputElement = document.getElementById('task-input');
+            const task = taskInputElement.value;
+
+            if (!task) {
+                alert('Please Enter a Task');
+                return;
+            }
+            tasks.push(task);
+            loadTasks();
+
+            //add notes on top
+            // tasks.unshift(task);
+            // loadTasks();
+
+            taskInputElement.value = '';
+        }
+
+    </script>
+</body>
+
+</html>
